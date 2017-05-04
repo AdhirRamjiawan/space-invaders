@@ -3,7 +3,7 @@ using System.Collections;
 using Assets;
 
 public class Player : MonoBehaviour {
-    
+
     GameObject player;
     private static float speed = 0.25f;
     private DirectionEnum direction;
@@ -79,5 +79,11 @@ public class Player : MonoBehaviour {
         }
 
         player.transform.position = newPosition;
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        //Debug.Log("Collision");
+        //Destroy(other.gameObject);
     }
 }

@@ -7,12 +7,17 @@ public class Game : MonoBehaviour {
 
     public List<GameObject> bullets;
     public List<GameObject> aliens;
+    public List<GameObject> bulletsToRemove;
+    public List<GameObject> aliensToRemove;
 
     private GameObject alientTemplate;
     private float alienSpeed = 0.05f;
 
 	// Use this for initialization
 	void Start () {
+        Debug.Log("Starting game");
+        aliensToRemove = new List<GameObject>();
+        bulletsToRemove = new List<GameObject>();
         bullets = new List<GameObject>();
         aliens = new List<GameObject>();
         alientTemplate = GameObject.Find("alien");
@@ -20,10 +25,7 @@ public class Game : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        List<GameObject> bulletsToRemove = new List<GameObject>();
-        List<GameObject> aliensToRemove = new List<GameObject>();
-
-
+        
         if (Input.GetKeyDown(KeyCode.Escape))
             Application.Quit();
 
@@ -54,6 +56,12 @@ public class Game : MonoBehaviour {
 
         foreach (GameObject alien in aliens)
         {
+            if (alien == null)
+            {
+                aliensToRemove.Add(alien);
+                continue;
+            }
+
             alien.transform.position = new Vector3(alien.transform.position.x, alien.transform.position.y - alienSpeed, alien.transform.position.z);
 
             if (isOutsideUniverse(alien.transform.position))
