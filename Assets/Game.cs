@@ -21,6 +21,9 @@ public class Game : MonoBehaviour {
         bullets = new List<GameObject>();
         aliens = new List<GameObject>();
         alientTemplate = GameObject.Find("alien");
+
+        var audio = GetComponent<AudioSource>();
+        audio.Play(1000);
 	}
 	
 	// Update is called once per frame
