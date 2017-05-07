@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Assets;
+using UnityEngine.SceneManagement;
 
 public class Game : MonoBehaviour {
 
@@ -23,14 +24,14 @@ public class Game : MonoBehaviour {
         alientTemplate = GameObject.Find("alien");
 
         var audio = GetComponent<AudioSource>();
-        audio.Play(1000);
+        //audio.Play(1000);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        
+
         if (Input.GetKeyDown(KeyCode.Escape))
-            Application.Quit();
+            SceneManager.LoadScene("MainMenu");
 
         // AFTER A CERTAIN DISTANCE BULLET INSTANCES SHOULD BE DESTROYED TO IMRPOVE PERFORMANCE
 	    foreach (GameObject bullet in bullets)
