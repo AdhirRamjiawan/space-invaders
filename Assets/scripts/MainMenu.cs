@@ -65,7 +65,7 @@ public class MainMenu : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.Return))
         {
             if (selectedOption == 0)
-                SceneManager.LoadScene("Level1");
+                SceneManager.LoadScene("scenes/Level1");
             else if (selectedOption == 2)
                 Application.Quit();
         }

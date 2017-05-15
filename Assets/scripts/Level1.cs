@@ -4,15 +4,26 @@ using System.Collections.Generic;
 using Assets;
 using UnityEngine.SceneManagement;
 
-public class Game : MonoBehaviour {
+public class Level1 : MonoBehaviour {
 
     public List<GameObject> bullets;
     public List<GameObject> aliens;
     public List<GameObject> bulletsToRemove;
     public List<GameObject> aliensToRemove;
+    public int alienKillCount;
 
-    private GameObject alientTemplate;
+    private GameObject gameCamera;
+    private GameObject alienTemplate;
     private float alienSpeed = 0.05f;
+
+    // shakey camera params
+    public float minMaxBounds;
+    public int maxWobbleCount;
+    public float wobbleForce;
+    public bool shouldWobble;
+    private float cameraOriginalX;
+    private int currentWobbleCount;
+    private float sinAngleForWobble;
 
 	// Use this for initialization
 	void Start () {
@@ -21,18 +32,23 @@ public class Game : MonoBehaviour {
         bulletsToRemove = new List<GameObject>();
         bullets = new List<GameObject>();
         aliens = new List<GameObject>();
-        alientTemplate = GameObject.Find("alien");
-
+        alienTemplate = GameObject.Find("alien");
         var audio = GetComponent<AudioSource>();
         //audio.Play(1000);
-	}
+
+        gameCamera = GameObject.Find("Main Camera");
+        initShakeCamera();
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
 
+        applyShakeCameraUpdate();
+
         if (Input.GetKeyDown(KeyCode.Escape))
             SceneManager.LoadScene("MainMenu");
-
+        
         // AFTER A CERTAIN DISTANCE BULLET INSTANCES SHOULD BE DESTROYED TO IMRPOVE PERFORMANCE
 	    foreach (GameObject bullet in bullets)
         {
@@ -82,6 +98,11 @@ public class Game : MonoBehaviour {
         bulletsToRemove.Clear();
 
         aliensToRemove.ForEach(a => {
+            if (a.gameObject.GetComponent<Alien>().killedBy == "bullet")
+            {
+                alienKillCount++;
+            }
+
             aliens.Remove(a);
             GameObject.Destroy(a);
         });
@@ -97,7 +118,7 @@ public class Game : MonoBehaviour {
             {
                 System.Random random = new System.Random();
                 
-                GameObject tmpAlien = GameObject.Instantiate<GameObject>(alientTemplate);
+                GameObject tmpAlien = GameObject.Instantiate<GameObject>(alienTemplate);
                 tmpAlien.transform.position = new Vector3((float)random.Next(-30, 30), (float)random.Next(20, 30), 0f);
                 aliens.Add(tmpAlien);
             }
@@ -113,5 +134,40 @@ public class Game : MonoBehaviour {
             return true;
 
         return false;
+    }
+
+    private void initShakeCamera()
+    {
+        cameraOriginalX = gameCamera.transform.position.x;
+
+        if (minMaxBounds == 0)
+            minMaxBounds = 5f;
+
+        if (maxWobbleCount == 0)
+            maxWobbleCount = 7;
+
+        if (wobbleForce == 0)
+            wobbleForce = 0.25f;
+    }
+
+    private void applyShakeCameraUpdate()
+    {
+        if (currentWobbleCount < maxWobbleCount && shouldWobble)
+        {
+            float delta = Mathf.Sin(sinAngleForWobble) * wobbleForce;
+
+            //Debug.Log("delta " + delta  );
+            //Debug.Log("sin angle " + sinAngleForWobble);
+
+            gameCamera.transform.position = new Vector3(gameCamera.transform.position.x + delta, gameCamera.transform.position.y + delta, gameCamera.transform.position.z);
+            currentWobbleCount++;
+            sinAngleForWobble += 45;
+        }
+        else
+        {
+            currentWobbleCount = 0;
+            shouldWobble = false;
+            sinAngleForWobble = 0;
+        }
     }
 }

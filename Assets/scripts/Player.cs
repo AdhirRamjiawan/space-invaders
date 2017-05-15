@@ -7,7 +7,7 @@ public class Player : MonoBehaviour {
     GameObject player;
     private static float speed = 0.25f;
     private DirectionEnum direction;
-    private Game game;
+    private Level1 game;
     private GameObject bullet;
 
 	// Use this for initialization
@@ -15,13 +15,18 @@ public class Player : MonoBehaviour {
         player = GameObject.Find("player");
         player.transform.rotation = new Quaternion();
         direction = DirectionEnum.North;
-        game = GetComponentInParent<Game>();
+        game = GetComponentInParent<Level1>();
         bullet = GameObject.Find("bullet");
 	}
 	
 	// Update is called once per frame
 	void Update () {
         Vector3 newPosition = player.transform.position;
+
+        if (game.alienKillCount >= 5)
+        {
+            player.GetComponent<SpriteRenderer>().color = Color.green;
+        }
 
         if (Input.GetKey(KeyCode.UpArrow))
         {
@@ -75,6 +80,7 @@ public class Player : MonoBehaviour {
             GameObject tmpBullet = GameObject.Instantiate<GameObject>(bullet);
             tmpBullet.GetComponent<Bullet>().direction = direction;
             tmpBullet.transform.position = player.transform.position;
+            tmpBullet.transform.parent = game.gameObject.transform;
             game.bullets.Add(tmpBullet);
         }
 
