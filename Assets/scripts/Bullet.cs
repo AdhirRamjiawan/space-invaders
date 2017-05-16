@@ -26,7 +26,7 @@ public class Bullet : MonoBehaviour {
 
     public void FireBullet()
     {
-        bulletFireSound.Play();
+        bulletFireSound.PlayOneShot(bulletFireSound.clip);
     }
     
     void OnTriggerEnter2D(Collider2D other)
@@ -36,6 +36,7 @@ public class Bullet : MonoBehaviour {
         {
             if (other.gameObject.GetComponent<Alien>().healthLevel <= 0)
             {
+                other.gameObject.GetComponent<Alien>().Die();
                 game.aliensToRemove.Add(other.gameObject);
                 other.gameObject.GetComponent<Alien>().killedBy = "bullet";
             }

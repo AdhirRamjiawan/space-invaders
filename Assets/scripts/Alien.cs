@@ -9,17 +9,26 @@ public class Alien : MonoBehaviour {
     public float maxHealthLevel;
 
     private Level1 level;
-    
 
-	// Use this for initialization
-	void Start () {
+    public static AudioSource alienDieSound;
+    public static AudioSource alienHitSound;
+
+    // Use this for initialization
+    void Start () {
         level = GameObject.Find("Game").GetComponent<Level1>();
 
         if (maxHealthLevel == 0)
             maxHealthLevel = 100;
 
         healthLevel = maxHealthLevel;
-	}
+
+        if (alienDieSound == null)
+            alienDieSound = GetComponents<AudioSource>()[0];
+
+        if (alienHitSound == null)
+            alienHitSound = GetComponents<AudioSource>()[1];
+
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -28,11 +37,21 @@ public class Alien : MonoBehaviour {
         material.color = new Color(1.0f- (healthLevel / maxHealthLevel), (healthLevel / maxHealthLevel), (healthLevel / maxHealthLevel));
 	}
 
+    public void Die()
+    {
+        alienDieSound.PlayOneShot(alienDieSound.clip);
+    }
+
+    public void Hit()
+    {
+        alienHitSound.PlayOneShot(alienHitSound.clip);
+        healthLevel -= 20;
+        level.shouldWobble = true;
+    }
+
     void OnTriggerEnter2D(Collider2D other)
     {
-        level.shouldWobble = true;
-        healthLevel -= 20;
-
+        Hit();
         //Debug.Log("Collision");
         //Destroy(other.gameObject);
     }
