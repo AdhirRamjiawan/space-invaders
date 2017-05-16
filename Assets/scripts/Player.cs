@@ -9,6 +9,10 @@ public class Player : MonoBehaviour {
     private DirectionEnum direction;
     private Level1 game;
     private GameObject bullet;
+    private float lastFireTime;
+
+    public float bulletFireRate;
+
 
 	// Use this for initialization
 	void Start () {
@@ -17,6 +21,11 @@ public class Player : MonoBehaviour {
         direction = DirectionEnum.North;
         game = GetComponentInParent<Level1>();
         bullet = GameObject.Find("bullet");
+
+        if (bulletFireRate == 0)
+        {
+            bulletFireRate = 0.02f;
+        }
 	}
 	
 	// Update is called once per frame
@@ -77,11 +86,18 @@ public class Player : MonoBehaviour {
 
         if (Input.GetKey(KeyCode.Z))
         {
-            GameObject tmpBullet = GameObject.Instantiate<GameObject>(bullet);
-            tmpBullet.GetComponent<Bullet>().direction = direction;
-            tmpBullet.transform.position = player.transform.position;
-            tmpBullet.transform.parent = game.gameObject.transform;
-            game.bullets.Add(tmpBullet);
+            //Debug.Log(Time.unscaledTime - lastFireTime);
+            if (Time.unscaledTime - lastFireTime > bulletFireRate)
+            {
+                lastFireTime = Time.unscaledTime;
+                GameObject tmpBullet = GameObject.Instantiate<GameObject>(bullet);
+                tmpBullet.GetComponent<Bullet>().direction = direction;
+                tmpBullet.transform.position = player.transform.position;
+                tmpBullet.transform.parent = game.gameObject.transform;
+                game.bullets.Add(tmpBullet);
+            }
+
+            
         }
 
         player.transform.position = newPosition;

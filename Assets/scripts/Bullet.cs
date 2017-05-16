@@ -24,9 +24,11 @@ public class Bullet : MonoBehaviour {
         //Debug.Log(other.tag);
         if (other.tag == "Alien")
         {
-            game.aliensToRemove.Add(other.gameObject);
-            other.gameObject.GetComponent<Alien>().killedBy = "bullet";
-            
+            if (other.gameObject.GetComponent<Alien>().healthLevel <= 0)
+            {
+                game.aliensToRemove.Add(other.gameObject);
+                other.gameObject.GetComponent<Alien>().killedBy = "bullet";
+            }
         }
     }
 }
