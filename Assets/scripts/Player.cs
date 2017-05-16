@@ -95,6 +95,8 @@ public class Player : MonoBehaviour {
                 tmpBullet.transform.position = player.transform.position;
                 tmpBullet.transform.parent = game.gameObject.transform;
                 game.bullets.Add(tmpBullet);
+
+                tmpBullet.GetComponent<Bullet>().FireBullet();
             }
 
             

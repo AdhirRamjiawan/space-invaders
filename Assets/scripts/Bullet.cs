@@ -8,16 +8,26 @@ public class Bullet : MonoBehaviour {
     public DirectionEnum direction;
     private Level1 game;
 
+    public static AudioSource bulletFireSound;
+
 	// Use this for initialization
 	void Start () {
         speed = 1f;
         game = GetComponentInParent<Level1>();
+
+        if (bulletFireSound == null)
+            bulletFireSound = GetComponent<AudioSource>();
     }
 	
 	// Update is called once per frame
 	void Update () {
 	
 	}
+
+    public void FireBullet()
+    {
+        bulletFireSound.Play();
+    }
     
     void OnTriggerEnter2D(Collider2D other)
     {

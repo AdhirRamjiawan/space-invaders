@@ -33,9 +33,6 @@ public class Level1 : MonoBehaviour {
         bullets = new List<GameObject>();
         aliens = new List<GameObject>();
         alienTemplate = GameObject.Find("alien");
-        var audio = GetComponent<AudioSource>();
-        //audio.Play(1000);
-
         gameCamera = GameObject.Find("Main Camera");
         initShakeCamera();
 
