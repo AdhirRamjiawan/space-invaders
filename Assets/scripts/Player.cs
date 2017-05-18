@@ -8,11 +8,8 @@ public class Player : MonoBehaviour {
     private static float speed = 0.25f;
     private DirectionEnum direction;
     private Level1 game;
-    private GameObject bullet;
-    private float lastFireTime;
-
-    public float bulletFireRate;
-
+    
+    public GameObject currentWeapon;
 
 	// Use this for initialization
 	void Start () {
@@ -20,11 +17,10 @@ public class Player : MonoBehaviour {
         player.transform.rotation = new Quaternion();
         direction = DirectionEnum.North;
         game = GetComponentInParent<Level1>();
-        bullet = GameObject.Find("bullet");
-
-        if (bulletFireRate == 0)
+        
+        if (currentWeapon == null || (currentWeapon.GetComponent<Weapon>() == null))
         {
-            bulletFireRate = 0.02f;
+            Debug.Log("invalid game object set as player current weapon");
         }
 	}
 	
@@ -87,19 +83,11 @@ public class Player : MonoBehaviour {
         if (Input.GetKey(KeyCode.Z))
         {
             //Debug.Log(Time.unscaledTime - lastFireTime);
-            if (Time.unscaledTime - lastFireTime > bulletFireRate)
+
+            if (currentWeapon != null && (currentWeapon.GetComponent<Weapon>() != null))
             {
-                lastFireTime = Time.unscaledTime;
-                GameObject tmpBullet = GameObject.Instantiate<GameObject>(bullet);
-                tmpBullet.GetComponent<Bullet>().direction = direction;
-                tmpBullet.transform.position = player.transform.position;
-                tmpBullet.transform.parent = game.gameObject.transform;
-                game.bullets.Add(tmpBullet);
-
-                tmpBullet.GetComponent<Bullet>().FireBullet();
+                currentWeapon.GetComponent<Weapon>().FireBullet(game, this, direction);
             }
-
-            
         }
 
         player.transform.position = newPosition;
