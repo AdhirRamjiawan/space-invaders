@@ -6,7 +6,9 @@ public class Bullet : MonoBehaviour {
     
     public float speed;
     public DirectionEnum direction;
+    public float damage;
     private Level1 game;
+
 
     public static AudioSource bulletFireSound;
 
@@ -17,6 +19,9 @@ public class Bullet : MonoBehaviour {
 
         if (bulletFireSound == null)
             bulletFireSound = GetComponent<AudioSource>();
+
+        if (damage == 0)
+            damage = 20f;
     }
 	
 	// Update is called once per frame

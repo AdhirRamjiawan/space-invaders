@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Assets;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
 
 public class Level1 : MonoBehaviour {
 
@@ -35,7 +36,8 @@ public class Level1 : MonoBehaviour {
         alienTemplate = GameObject.Find("alien");
         gameCamera = GameObject.Find("Main Camera");
         initShakeCamera();
-
+        
+        
     }
 	
 	// Update is called once per frame

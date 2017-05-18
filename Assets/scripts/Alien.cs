@@ -42,16 +42,21 @@ public class Alien : MonoBehaviour {
         alienDieSound.PlayOneShot(alienDieSound.clip);
     }
 
-    public void Hit()
+    public void Hit(GameObject other)
     {
+        float damage = 0f;
+
+        if (other.GetComponent<Bullet>() != null)
+            damage = other.GetComponent<Bullet>().damage;
+
         alienHitSound.PlayOneShot(alienHitSound.clip);
-        healthLevel -= 20;
+        healthLevel -= damage;
         level.shouldWobble = true;
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        Hit();
+        Hit(other.gameObject);
         //Debug.Log("Collision");
         //Destroy(other.gameObject);
     }
