@@ -99,7 +99,7 @@ public class Player : MonoBehaviour {
 
     public void Hit(GameObject other)
     {
-        if (other.tag == "Basic Gun")
+        if (other.tag == "Basic Gun" || other.tag == "Rapid Blaster")
         {
             if (other.GetComponent<Weapon>() != null)
             {

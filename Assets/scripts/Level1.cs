@@ -17,7 +17,8 @@ public class Level1 : MonoBehaviour {
 
     private GameObject gameCamera;
     private GameObject alienTemplate;
-    private GameObject weaponPackageTemplate;
+    private GameObject basicGunWeaponPackageTemplate;
+    private GameObject rapidBlasterWeaponPackageTemplate;
     private float alienSpeed = 0.05f;
     private float weaponPackageSpeed = 0.05f;
 
@@ -41,7 +42,8 @@ public class Level1 : MonoBehaviour {
         weaponPackagesToRemove = new List<GameObject>();
 
         alienTemplate = GameObject.Find("alien");
-        weaponPackageTemplate = GameObject.Find("basic gun"); // instead of "basic gun" we need to find a way to allow for inheritence of Weapon type GameObjects
+        basicGunWeaponPackageTemplate = GameObject.Find("basic gun"); // instead of "basic gun" we need to find a way to allow for inheritence of Weapon type GameObjects
+        rapidBlasterWeaponPackageTemplate = GameObject.Find("rapid blaster");
         gameCamera = GameObject.Find("Main Camera");
 
         initShakeCamera();
@@ -164,8 +166,17 @@ public class Level1 : MonoBehaviour {
             {
                 System.Random random = new System.Random();
 
-                GameObject weaponPackage = GameObject.Instantiate<GameObject>(weaponPackageTemplate);
+                GameObject weaponPackage = GameObject.Instantiate<GameObject>(basicGunWeaponPackageTemplate);
                 weaponPackage.transform.position = new Vector3((float)random.Next(-30, 30), (float)random.Next(20, 30), 0f);
+                weaponPackages.Add(weaponPackage);
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                System.Random random = new System.Random();
+
+                GameObject weaponPackage = GameObject.Instantiate<GameObject>(rapidBlasterWeaponPackageTemplate);
+                weaponPackage.transform.position = new Vector3((float)random.Next(-20, 10), (float)random.Next(10, 20), 0f);
                 weaponPackages.Add(weaponPackage);
             }
         }
