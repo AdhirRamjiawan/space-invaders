@@ -56,7 +56,11 @@ public class Alien : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        Hit(other.gameObject);
+        if (other.tag == "Bullet")
+        {
+            Hit(other.gameObject);
+        }
+        
         //Debug.Log("Collision");
         //Destroy(other.gameObject);
     }

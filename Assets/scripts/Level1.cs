@@ -11,11 +11,15 @@ public class Level1 : MonoBehaviour {
     public List<GameObject> aliens;
     public List<GameObject> bulletsToRemove;
     public List<GameObject> aliensToRemove;
+    public List<GameObject> weaponPackages;
+    public List<GameObject> weaponPackagesToRemove;
     public int alienKillCount;
 
     private GameObject gameCamera;
     private GameObject alienTemplate;
+    private GameObject weaponPackageTemplate;
     private float alienSpeed = 0.05f;
+    private float weaponPackageSpeed = 0.05f;
 
     // shakey camera params
     public float minMaxBounds;
@@ -33,11 +37,14 @@ public class Level1 : MonoBehaviour {
         bulletsToRemove = new List<GameObject>();
         bullets = new List<GameObject>();
         aliens = new List<GameObject>();
+        weaponPackages = new List<GameObject>();
+        weaponPackagesToRemove = new List<GameObject>();
+
         alienTemplate = GameObject.Find("alien");
+        weaponPackageTemplate = GameObject.Find("basic gun"); // instead of "basic gun" we need to find a way to allow for inheritence of Weapon type GameObjects
         gameCamera = GameObject.Find("Main Camera");
+
         initShakeCamera();
-        
-        
     }
 	
 	// Update is called once per frame
@@ -87,7 +94,25 @@ public class Level1 : MonoBehaviour {
                 aliensToRemove.Add(alien);
         }
 
+        foreach (GameObject package in weaponPackages)
+        {
+            if (package != null && package.GetComponent<Weapon>() != null && package.GetComponent<Weapon>().isObtained)
+                continue;
+
+            if (package == null)
+            {
+                weaponPackagesToRemove.Add(package);
+                continue;
+            }
+
+            package.transform.position = new Vector3(package.transform.position.x, package.transform.position.y - weaponPackageSpeed, package.transform.position.z);
+
+            if (isOutsideUniverse(package.transform.position))
+                weaponPackagesToRemove.Add(package);
+        }
+
         spawnAliens();
+        spawnWeaponPackages();
 
         bulletsToRemove.ForEach(b => {
             bullets.Remove(b);
@@ -95,6 +120,13 @@ public class Level1 : MonoBehaviour {
         });
 
         bulletsToRemove.Clear();
+
+        weaponPackagesToRemove.ForEach(p => {
+            weaponPackages.Remove(p);
+            GameObject.Destroy(p);
+        });
+
+        weaponPackagesToRemove.Clear();
 
         aliensToRemove.ForEach(a => {
             if (a.gameObject.GetComponent<Alien>().killedBy == "bullet")
@@ -120,6 +152,21 @@ public class Level1 : MonoBehaviour {
                 GameObject tmpAlien = GameObject.Instantiate<GameObject>(alienTemplate);
                 tmpAlien.transform.position = new Vector3((float)random.Next(-30, 30), (float)random.Next(20, 30), 0f);
                 aliens.Add(tmpAlien);
+            }
+        }
+    }
+
+    private void spawnWeaponPackages()
+    {
+        if (weaponPackages.Count < 10)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                System.Random random = new System.Random();
+
+                GameObject weaponPackage = GameObject.Instantiate<GameObject>(weaponPackageTemplate);
+                weaponPackage.transform.position = new Vector3((float)random.Next(-30, 30), (float)random.Next(20, 30), 0f);
+                weaponPackages.Add(weaponPackage);
             }
         }
     }

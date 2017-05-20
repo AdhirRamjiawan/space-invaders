@@ -88,13 +88,39 @@ public class Player : MonoBehaviour {
             {
                 currentWeapon.GetComponent<Weapon>().FireBullet(game, this, direction);
             }
+            else
+            {
+                Debug.Log("can't fire bullet!!!");
+            }
         }
 
         player.transform.position = newPosition;
     }
 
+    public void Hit(GameObject other)
+    {
+        if (other.tag == "Basic Gun")
+        {
+            if (other.GetComponent<Weapon>() != null)
+            {
+                currentWeapon = other.GetComponent<Weapon>().gameObject;
+                other.GetComponent<Weapon>().ObtainWeapon();
+                Debug.Log("New weapon obtained");
+            }
+            else
+            {
+                Debug.Log("no weapon component found");
+            }
+        }
+
+        //alienHitSound.PlayOneShot(alienHitSound.clip);
+        //healthLevel -= damage;
+        //level.shouldWobble = true;
+    }
+
     void OnTriggerEnter2D(Collider2D other)
     {
+        Hit(other.gameObject);
         //Debug.Log("Collision");
         //Destroy(other.gameObject);
     }

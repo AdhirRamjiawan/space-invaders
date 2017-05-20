@@ -10,6 +10,7 @@ public class Weapon : MonoBehaviour, IShootable {
     private float lastFireTime;
     private GameObject bullet;
 
+    public bool isObtained;
     public float bulletFireRate;
     // Use this for initialization
     void Start () {
@@ -40,6 +41,12 @@ public class Weapon : MonoBehaviour, IShootable {
 
             tmpBullet.GetComponent<Bullet>().FireBullet();
         }
+    }
+
+    public void ObtainWeapon()
+    {
+        isObtained = true;
+        gameObject.transform.position = new Vector3(gameObject.transform.position.x - 1000, gameObject.transform.position.y, gameObject.transform.position.z);
     }
 
     public void SetBulletDamage(float damage)
